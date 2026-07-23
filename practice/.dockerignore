@@ -1,0 +1,7 @@
+.git
+.idea
+target
+*.zip
+*.DS_Store
+.env
+README.md
