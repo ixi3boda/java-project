@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,13 +26,15 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ProductResponse> getAllProducts(Long categoryId, Pageable pageable) {
 
     }
 
-    @Override
-    public ProductResponse getProductById(Long id) {
 
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponse getProductById(Long id) {
     }
 
     @Override
@@ -45,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse updateProduct(Long id, ProductRequest request) {
 
     }
+
 
     @Override
     @Transactional

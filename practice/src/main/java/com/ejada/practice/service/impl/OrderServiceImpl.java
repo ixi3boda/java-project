@@ -40,16 +40,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<OrderResponse> getMyOrders(String username, Pageable pageable) {
 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<OrderResponse> getAllOrders(OrderStatus status, Long userId, Pageable pageable) {
 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OrderResponse getOrderById(Long id, String username, boolean isAdmin) {
 
     }
@@ -63,4 +66,5 @@ public class OrderServiceImpl implements OrderService {
     private OrderResponse toResponse(Order order) {
 
     }
+
 }
