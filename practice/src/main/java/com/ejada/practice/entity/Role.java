@@ -44,6 +44,5 @@ public class Role {
      * Mapped by the {@code roles} field on the {@link User} side.
      */
     @ManyToMany(mappedBy = "roles")
-    @Builder.Default
     private Set<User> users;
 }

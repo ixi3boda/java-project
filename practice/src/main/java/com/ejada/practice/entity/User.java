@@ -80,7 +80,6 @@ public class User {
      * Defaults to {@code true}; set to {@code false} to soft-disable the account.
      */
     @Column(nullable = false)
-    @Builder.Default
     private boolean enabled = true;
 
     /**
@@ -90,7 +89,6 @@ public class User {
      * @see com.ejada.practice.security.LoginAttemptService
      */
     @Column(name = "account_non_locked", nullable = false)
-    @Builder.Default
     private boolean accountNonLocked = true;
 
     /**
@@ -124,13 +122,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    @Builder.Default
     private Set<Role> roles;
 
     /**
      * All orders placed by this user.
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
-    @Builder.Default
     private List<Order> orders;
 }

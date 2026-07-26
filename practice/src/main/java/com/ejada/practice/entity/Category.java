@@ -44,6 +44,5 @@ public class Category {
      * Mapped by the {@code categories} field on the {@link Product} side.
      */
     @ManyToMany(mappedBy = "categories")
-    @Builder.Default
     private Set<Product> products;
 }
