@@ -1,7 +1,8 @@
-.git
-.idea
-target
-*.zip
-*.DS_Store
+target/
+.git/
+.idea/
+.mvn/wrapper/maven-wrapper.jar
+*.iml
+.DS_Store
 .env
-README.md
+HELP.md

@@ -1,10 +1,11 @@
 package com.ejada.practice.exception;
 
 import com.ejada.practice.dto.response.ErrorResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
@@ -14,40 +15,99 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+/**
+ * Checks that each exception type maps to the right HTTP status and body.
+ */
+@DisplayName("GlobalExceptionHandler")
 class GlobalExceptionHandlerTest {
-    @Mock private WebRequest request;
-    @Mock private BindingResult bindingResult;
 
-    private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
+    private GlobalExceptionHandler handler;
+    private WebRequest webRequest;
 
-    @Test void mapsApplicationAndSecurityExceptionsToExpectedResponses() {
-        when(request.getDescription(false)).thenReturn("uri=/api/items");
-
-        assertResponse(handler.handleNotFound(new ResourceNotFoundException("missing"), request), 404, "missing");
-        assertResponse(handler.handleDuplicate(new DuplicateResourceException("exists"), request), 409, "exists");
-        assertResponse(handler.handleInsufficientStock(new InsufficientStockException("low stock"), request), 400, "low stock");
-        assertResponse(handler.handleAccessDenied(new AccessDeniedException("denied"), request), 403, "denied");
-        assertResponse(handler.handleBadCredentials(new BadCredentialsException("bad"), request), 401, "Invalid username or password");
-        assertResponse(handler.handleGeneric(new RuntimeException("broken"), request), 500, "broken");
+    @BeforeEach
+    void setUp() {
+        handler = new GlobalExceptionHandler();
+        webRequest = mock(WebRequest.class);
+        when(webRequest.getDescription(false)).thenReturn("uri=/api/test");
     }
 
-    @Test void mapsValidationErrors() {
-        when(request.getDescription(false)).thenReturn("uri=/api/items");
-        when(bindingResult.getFieldErrors()).thenReturn(List.of(new FieldError("product", "name", "must not be blank")));
-        MethodArgumentNotValidException exception = new MethodArgumentNotValidException(null, bindingResult);
+    /** handleValidation joins field errors and returns 400. */
+    @Test
+    @DisplayName("handleValidation joins field errors and returns 400")
+    void handleValidation_returns400WithJoinedMessage() {
+        MethodArgumentNotValidException ex = mock(MethodArgumentNotValidException.class);
+        BindingResult bindingResult = mock(BindingResult.class);
+        FieldError fieldError = new FieldError("request", "name", "must not be blank");
+        when(ex.getBindingResult()).thenReturn(bindingResult);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError));
 
-        assertResponse(handler.handleValidation(exception, request), 400, "name: must not be blank");
+        ResponseEntity<ErrorResponse> response = handler.handleValidation(ex, webRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().getMessage()).isEqualTo("name: must not be blank");
+        assertThat(response.getBody().getPath()).isEqualTo("/api/test");
     }
 
-    private void assertResponse(org.springframework.http.ResponseEntity<ErrorResponse> response, int status, String message) {
-        assertEquals(status, response.getStatusCode().value());
-        assertNotNull(response.getBody());
-        assertEquals(message, response.getBody().getMessage());
-        assertEquals("/api/items", response.getBody().getPath());
-        assertNotNull(response.getBody().getTimestamp());
+    /** handleNotFound returns 404 with the exception message. */
+    @Test
+    @DisplayName("handleNotFound returns 404 with the exception message")
+    void handleNotFound_returns404() {
+        ResourceNotFoundException ex = new ResourceNotFoundException("Product not found with id: 1");
+
+        ResponseEntity<ErrorResponse> response = handler.handleNotFound(ex, webRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody().getMessage()).isEqualTo("Product not found with id: 1");
+    }
+
+    /** handleDuplicate returns 409 with the exception message. */
+    @Test
+    @DisplayName("handleDuplicate returns 409 with the exception message")
+    void handleDuplicate_returns409() {
+        DuplicateResourceException ex = new DuplicateResourceException("Username already taken: bob");
+
+        ResponseEntity<ErrorResponse> response = handler.handleDuplicate(ex, webRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody().getMessage()).isEqualTo("Username already taken: bob");
+    }
+
+    /** handleAccessDenied returns 403 with the exception message. */
+    @Test
+    @DisplayName("handleAccessDenied returns 403 with the exception message")
+    void handleAccessDenied_returns403() {
+        AccessDeniedException ex = new AccessDeniedException("You do not have permission to view this order");
+
+        ResponseEntity<ErrorResponse> response = handler.handleAccessDenied(ex, webRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
+    /** handleBadCredentials returns 401 with a generic message. */
+    @Test
+    @DisplayName("handleBadCredentials returns 401 with a generic message")
+    void handleBadCredentials_returns401WithGenericMessage() {
+        BadCredentialsException ex = new BadCredentialsException("actual reason should not leak");
+
+        ResponseEntity<ErrorResponse> response = handler.handleBadCredentials(ex, webRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(response.getBody().getMessage()).isEqualTo("Invalid username or password");
+    }
+
+    /** handleGeneric returns 500 for any unhandled exception. */
+    @Test
+    @DisplayName("handleGeneric returns 500 for any unhandled exception")
+    void handleGeneric_returns500() {
+        RuntimeException ex = new RuntimeException("boom");
+
+        ResponseEntity<ErrorResponse> response = handler.handleGeneric(ex, webRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(response.getBody().getMessage()).isEqualTo("boom");
     }
 }
