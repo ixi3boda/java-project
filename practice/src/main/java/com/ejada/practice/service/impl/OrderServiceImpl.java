@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
  * </ul>
  * </p>
  */
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -199,4 +200,39 @@ public class OrderServiceImpl implements OrderService {
                 .items(items)
                 .build();
     }
+
+    @Override
+    @Transactional
+    public OrderResponse placeOrder(String username, OrderRequest request) {
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<OrderResponse> getMyOrders(String username, Pageable pageable) {
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<OrderResponse> getAllOrders(OrderStatus status, Long userId, Pageable pageable) {
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public OrderResponse getOrderById(Long id, String username, boolean isAdmin) {
+
+    }
+
+    @Override
+    @Transactional
+    public OrderResponse updateStatus(Long id, OrderStatusUpdateRequest request) {
+
+    }
+
+    private OrderResponse toResponse(Order order) {
+
+    }
+
 }

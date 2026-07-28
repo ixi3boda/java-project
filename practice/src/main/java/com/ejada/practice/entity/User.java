@@ -3,6 +3,8 @@ package com.ejada.practice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -79,7 +81,6 @@ public class User {
      * Defaults to {@code true}; set to {@code false} to soft-disable the account.
      */
     @Column(nullable = false)
-    @Builder.Default
     private boolean enabled = true;
 
     /**
@@ -89,7 +90,6 @@ public class User {
      * @see com.ejada.practice.security.LoginAttemptService
      */
     @Column(name = "account_non_locked", nullable = false)
-    @Builder.Default
     private boolean accountNonLocked = true;
 
     /**
