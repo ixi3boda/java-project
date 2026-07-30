@@ -22,5 +22,21 @@
       </h2>
       <a routerLink="/admin/categories" style="font-size: 0.9rem;">Manage categories →</a>
     </div>
+
+    <div class="glass-panel" style="flex: 1; min-width: 220px;">
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Total Orders</p>
+      <h2 style="color: var(--primary-color); font-size: 2.5rem;">
+        {{ isLoading ? '—' : (totalOrders ?? '—') }}
+      </h2>
+      <a routerLink="/admin/orders" style="font-size: 0.9rem;">Manage orders →</a>
+    </div>
+
+    <div class="glass-panel" style="flex: 1; min-width: 220px;">
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Total Users</p>
+      <h2 style="color: var(--accent-color); font-size: 2.5rem;">
+        {{ isLoading ? '—' : (totalUsers ?? '—') }}
+      </h2>
+      <a routerLink="/admin/users" style="font-size: 0.9rem;">Manage users →</a>
+    </div>
   </div>
 </div>

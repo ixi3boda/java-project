@@ -13,7 +13,6 @@ import { CategoryService } from '../../../core/services/category.service';
 import { ProductResponse } from '../../../core/models/product.models';
 import { CategoryResponse } from '../../../core/models/category.models';
 
-/** Backend requires at least one category per product (ProductRequest.categoryIds is @NotEmpty). */
 function requireAtLeastOne(control: AbstractControl): ValidationErrors | null {
   const value = control.value as number[] | null;
   return value && value.length > 0 ? null : { required: true };
