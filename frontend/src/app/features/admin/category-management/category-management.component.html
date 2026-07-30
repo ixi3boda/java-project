@@ -1,0 +1,48 @@
+<div class="animate-fade-in">
+  <div class="page-header">
+    <div>
+      <h2>Manage Categories</h2>
+      <p style="color: var(--text-secondary);">Categories organize products in the storefront and admin catalogue</p>
+    </div>
+  </div>
+
+  <div class="glass-panel" style="margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1rem;">Add a category</h3>
+
+    <div *ngIf="saveError" style="background-color: rgba(239, 68, 68, 0.1); color: var(--danger-color); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
+      {{ saveError }}
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+      <input
+        class="input-field"
+        placeholder="e.g. Electronics"
+        [(ngModel)]="newCategoryName"
+        (keyup.enter)="createCategory()"
+      />
+      <button class="btn-primary" [disabled]="isSaving || !newCategoryName.trim()" (click)="createCategory()">
+        {{ isSaving ? 'Adding...' : 'Add' }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="state-message">Loading categories...</div>
+  <div *ngIf="!isLoading && error" class="state-message error">{{ error }}</div>
+
+  <table class="data-table" *ngIf="!isLoading && categories.length">
+    <thead>
+      <tr>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories">
+        <td>{{ category.name }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && !error && categories.length === 0" class="state-message">
+    No categories yet — add your first one above.
+  </div>
+</div>

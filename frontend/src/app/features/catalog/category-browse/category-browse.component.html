@@ -1,0 +1,26 @@
+<div class="animate-fade-in">
+  <div class="page-header">
+    <div>
+      <h2>Browse Categories</h2>
+      <p style="color: var(--text-secondary);">Pick a category to see what's in stock</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="state-message">Loading categories...</div>
+  <div *ngIf="!isLoading && error" class="state-message error">{{ error }}</div>
+  <div *ngIf="!isLoading && !error && categories.length === 0" class="state-message">
+    No categories available yet.
+  </div>
+
+  <div *ngIf="!isLoading && !error && categories.length" class="product-grid">
+    <div
+      class="product-card"
+      style="cursor: pointer; align-items: center; text-align: center;"
+      *ngFor="let category of categories"
+      (click)="browseCategory(category.id)"
+    >
+      <h3 style="margin: 0;">{{ category.name }}</h3>
+      <span style="color: var(--text-secondary); font-size: 0.85rem;">View products →</span>
+    </div>
+  </div>
+</div>
