@@ -1,0 +1,60 @@
+<div class="animate-fade-in">
+  <div class="page-header">
+    <div>
+      <h2>Shop Products</h2>
+      <p style="color: var(--text-secondary);">Browse everything currently in stock</p>
+    </div>
+
+    <select
+      class="select-field"
+      [(ngModel)]="selectedCategoryId"
+      (ngModelChange)="onCategoryChange()"
+      *ngIf="categories.length"
+    >
+      <option [ngValue]="null">All categories</option>
+      <option *ngFor="let category of categories" [ngValue]="category.id">
+        {{ category.name }}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="isLoading" class="state-message">Loading products...</div>
+
+  <div *ngIf="!isLoading && error" class="state-message error">{{ error }}</div>
+
+  <div *ngIf="!isLoading && !error && products.length === 0" class="state-message">
+    No products found.
+  </div>
+
+  <div *ngIf="!isLoading && !error && products.length" class="product-grid">
+    <div class="product-card" *ngFor="let product of products">
+      <h3>{{ product.name }}</h3>
+      <p class="description">{{ product.description }}</p>
+      <div>
+        <span class="badge" *ngFor="let category of product.categories">{{ category }}</span>
+      </div>
+      <span class="badge" [class.stock-low]="product.stockQuantity < 5">
+        {{ product.stockQuantity > 0 ? product.stockQuantity + ' in stock' : 'Out of stock' }}
+      </span>
+      <div class="price">{{ product.price | currency }}</div>
+      <button
+        class="btn-primary"
+        [disabled]="product.stockQuantity <= 0"
+        (click)="addToCart(product)"
+      >
+        {{ addedProductId === product.id ? 'Added ✓' : (product.stockQuantity > 0 ? 'Add to Cart' : 'Out of Stock') }}
+      </button>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!isLoading && !error && totalPages > 1"
+    style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 2rem;"
+  >
+    <button class="btn-secondary" [disabled]="page === 0" (click)="goToPage(page - 1)">Previous</button>
+    <span style="align-self: center; color: var(--text-secondary);">
+      Page {{ page + 1 }} of {{ totalPages }}
+    </span>
+    <button class="btn-secondary" [disabled]="page + 1 >= totalPages" (click)="goToPage(page + 1)">Next</button>
+  </div>
+</div>

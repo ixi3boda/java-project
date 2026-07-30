@@ -1,0 +1,40 @@
+<div style="display: flex; min-height: 100vh;">
+  <!-- Sidebar -->
+  <aside style="width: 250px; background-color: var(--surface-color); padding: 2rem 1rem; border-right: 1px solid var(--border-color);">
+    <h2 style="color: var(--primary-color); margin-bottom: 2rem; text-align: center;">Admin Panel</h2>
+    
+    <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <a routerLink="/admin" style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); color: var(--text-primary); background-color: rgba(255, 255, 255, 0.05); display: block;">
+        Dashboard
+      </a>
+      <a routerLink="/admin/products" style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); color: var(--text-primary); background-color: rgba(255, 255, 255, 0.05); display: block;">
+        Manage Products
+      </a>
+      <a routerLink="/admin/categories" style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); color: var(--text-primary); background-color: rgba(255, 255, 255, 0.05); display: block;">
+        Manage Categories
+      </a>
+      <a routerLink="/admin/orders" style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); color: var(--text-primary); background-color: rgba(255, 255, 255, 0.05); display: block;">
+        Manage Orders
+      </a>
+      <a routerLink="/admin/users" style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); color: var(--text-primary); background-color: rgba(255, 255, 255, 0.05); display: block;">
+        Manage Users
+      </a>
+      <a routerLink="/products" style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); color: var(--text-secondary); display: block; margin-top: 1rem;">
+        ← Back to Store
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main style="flex: 1; display: flex; flex-direction: column;">
+    <!-- Topbar -->
+    <header style="background-color: var(--bg-color); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: flex-end; align-items: center;">
+      <button class="btn-primary" style="background: var(--danger-color); box-shadow: none;" (click)="logout()">Sign Out</button>
+    </header>
+
+    <!-- Page Content -->
+    <div style="padding: 2rem; flex: 1; overflow-y: auto;">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

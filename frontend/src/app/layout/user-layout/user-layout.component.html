@@ -1,0 +1,20 @@
+<header style="background-color: var(--surface-color); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);">
+  <h1 style="margin: 0; font-size: 1.5rem;"><a routerLink="/" style="color: var(--primary-color);">MyStore</a></h1>
+  <nav style="display: flex; gap: 1.5rem; align-items: center;">
+    <a routerLink="/products">Shop</a>
+    <a routerLink="/categories">Categories</a>
+    <ng-container *ngIf="!authService.isAuthenticated()">
+      <a routerLink="/login" class="btn-primary">Sign In</a>
+    </ng-container>
+    <ng-container *ngIf="authService.isAuthenticated()">
+      <a routerLink="/orders">My Orders</a>
+      <a routerLink="/profile">My Profile</a>
+      <a routerLink="/cart">Cart{{ cartService.itemCount() ? ' (' + cartService.itemCount() + ')' : '' }}</a>
+      <a *ngIf="authService.isAdmin()" routerLink="/admin" style="color: var(--accent-color);">Admin Dashboard</a>
+      <button class="btn-primary" style="background: var(--danger-color); box-shadow: none;" (click)="logout()">Sign Out</button>
+    </ng-container>
+  </nav>
+</header>
+<main style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+  <router-outlet></router-outlet>
+</main>

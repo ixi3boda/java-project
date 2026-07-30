@@ -1,0 +1,42 @@
+<div class="animate-fade-in">
+  <div class="page-header">
+    <div>
+      <h2>Admin Dashboard</h2>
+      <p style="color: var(--text-secondary);">Overview of your catalogue</p>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+    <div class="glass-panel" style="flex: 1; min-width: 220px;">
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Total Products</p>
+      <h2 style="color: var(--primary-color); font-size: 2.5rem;">
+        {{ isLoading ? '—' : (totalProducts ?? '—') }}
+      </h2>
+      <a routerLink="/admin/products" style="font-size: 0.9rem;">Manage products →</a>
+    </div>
+
+    <div class="glass-panel" style="flex: 1; min-width: 220px;">
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Total Categories</p>
+      <h2 style="color: var(--accent-color); font-size: 2.5rem;">
+        {{ isLoading ? '—' : (totalCategories ?? '—') }}
+      </h2>
+      <a routerLink="/admin/categories" style="font-size: 0.9rem;">Manage categories →</a>
+    </div>
+
+    <div class="glass-panel" style="flex: 1; min-width: 220px;">
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Total Orders</p>
+      <h2 style="color: var(--primary-color); font-size: 2.5rem;">
+        {{ isLoading ? '—' : (totalOrders ?? '—') }}
+      </h2>
+      <a routerLink="/admin/orders" style="font-size: 0.9rem;">Manage orders →</a>
+    </div>
+
+    <div class="glass-panel" style="flex: 1; min-width: 220px;">
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Total Users</p>
+      <h2 style="color: var(--accent-color); font-size: 2.5rem;">
+        {{ isLoading ? '—' : (totalUsers ?? '—') }}
+      </h2>
+      <a routerLink="/admin/users" style="font-size: 0.9rem;">Manage users →</a>
+    </div>
+  </div>
+</div>
