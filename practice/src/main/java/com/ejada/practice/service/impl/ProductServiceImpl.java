@@ -160,47 +160,6 @@ public class ProductServiceImpl implements ProductService {
                 .stockQuantity(product.getStockQuantity())
                 .categories(product.getCategories().stream().map(Category::getName).collect(Collectors.toSet()))
                 .build();
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<ProductResponse> getAllProducts(Long categoryId, Pageable pageable) {
-
     }
 
-
-    @Override
-    @Transactional(readOnly = true)
-    public ProductResponse getProductById(Long id) {
-    }
-
-    @Override
-    @Transactional
-    public ProductResponse createProduct(ProductRequest request) {
-
-    }
-
-    @Override
-    @Transactional
-    public ProductResponse updateProduct(Long id, ProductRequest request) {
-
-    }
-
-
-    @Override
-    @Transactional
-    public void deleteProduct(Long id) {
-
-    }
-
-    private Product findById(Long id) {
-
-    }
-
-    private Set<Category> resolveCategories(Set<Long> categoryIds) {
-
-    }
-
-    private ProductResponse toResponse(Product product) {
-
-    }
 }

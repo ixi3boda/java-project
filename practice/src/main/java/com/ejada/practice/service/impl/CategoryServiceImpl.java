@@ -72,21 +72,5 @@ public class CategoryServiceImpl implements CategoryService {
                 .id(category.getId())
                 .name(category.getName())
                 .build();
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<CategoryResponse> getAllCategories() {
-
-    }
-
-    @Override
-    @Transactional
-    public CategoryResponse createCategory(CategoryRequest request) {
-
-    }
-
-
-    private CategoryResponse toResponse(Category category) {
-
     }
 }
