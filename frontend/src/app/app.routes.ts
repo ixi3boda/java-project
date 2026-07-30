@@ -10,6 +10,11 @@ import { CategoryBrowseComponent } from './features/catalog/category-browse/cate
 import { ProductManagementComponent } from './features/admin/product-management/product-management.component';
 import { CategoryManagementComponent } from './features/admin/category-management/category-management.component';
 import { AdminDashboardComponent } from './features/admin/dashboard/admin-dashboard.component';
+import { OrderManagementComponent } from './features/admin/order-management/order-management.component';
+import { UserManagementComponent } from './features/admin/user-management/user-management.component';
+import { CartComponent } from './features/cart/cart.component';
+import { OrderHistoryComponent } from './features/orders/order-history/order-history.component';
+import { ProfileComponent } from './features/account/profile/profile.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -21,7 +26,10 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
       { path: 'products', component: ProductListComponent },
-      { path: 'categories', component: CategoryBrowseComponent }
+      { path: 'categories', component: CategoryBrowseComponent },
+      { path: 'cart', component: CartComponent, canActivate: [authGuard] },
+      { path: 'orders', component: OrderHistoryComponent, canActivate: [authGuard] },
+      { path: 'profile', component: ProfileComponent, canActivate: [authGuard] }
     ]
   },
 
@@ -32,7 +40,9 @@ export const routes: Routes = [
     children: [
       { path: '', component: AdminDashboardComponent },
       { path: 'products', component: ProductManagementComponent },
-      { path: 'categories', component: CategoryManagementComponent }
+      { path: 'categories', component: CategoryManagementComponent },
+      { path: 'orders', component: OrderManagementComponent },
+      { path: 'users', component: UserManagementComponent }
     ]
   },
 

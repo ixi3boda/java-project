@@ -7,6 +7,9 @@
       <a routerLink="/login" class="btn-primary">Sign In</a>
     </ng-container>
     <ng-container *ngIf="authService.isAuthenticated()">
+      <a routerLink="/orders">My Orders</a>
+      <a routerLink="/profile">My Profile</a>
+      <a routerLink="/cart">Cart{{ cartService.itemCount() ? ' (' + cartService.itemCount() + ')' : '' }}</a>
       <a *ngIf="authService.isAdmin()" routerLink="/admin" style="color: var(--accent-color);">Admin Dashboard</a>
       <button class="btn-primary" style="background: var(--danger-color); box-shadow: none;" (click)="logout()">Sign Out</button>
     </ng-container>

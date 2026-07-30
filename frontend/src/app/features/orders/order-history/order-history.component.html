@@ -1,0 +1,59 @@
+<div class="animate-fade-in">
+  <div class="page-header">
+    <div>
+      <h2>My Orders</h2>
+      <p style="color: var(--text-secondary);">Track the status of everything you've ordered</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="state-message">Loading your orders...</div>
+  <div *ngIf="!isLoading && error" class="state-message error">{{ error }}</div>
+
+  <div *ngIf="!isLoading && !error && orders.length === 0" class="state-message">
+    You haven't placed any orders yet — head to the <a routerLink="/products">shop</a> to get started.
+  </div>
+
+  <div *ngIf="!isLoading && orders.length" style="display: flex; flex-direction: column; gap: 1rem;">
+    <div class="glass-panel" *ngFor="let order of orders">
+      <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" (click)="toggleExpand(order.id)">
+        <div>
+          <strong>Order #{{ order.id }}</strong>
+          <div style="color: var(--text-secondary); font-size: 0.85rem;">{{ order.orderDate | date:'medium' }}</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <span class="badge" [class]="'status-' + order.status.toLowerCase()">{{ order.status }}</span>
+          <strong>{{ order.totalAmount | currency }}</strong>
+          <span>{{ expandedOrderId === order.id ? '▲' : '▼' }}</span>
+        </div>
+      </div>
+
+      <table class="data-table" style="margin-top: 1rem;" *ngIf="expandedOrderId === order.id">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Line Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of order.items">
+            <td>{{ item.productName }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.priceAtPurchase | currency }}</td>
+            <td>{{ item.priceAtPurchase * item.quantity | currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!isLoading && totalPages > 1"
+    style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 2rem;"
+  >
+    <button class="btn-secondary" [disabled]="page === 0" (click)="goToPage(page - 1)">Previous</button>
+    <span style="align-self: center; color: var(--text-secondary);">Page {{ page + 1 }} of {{ totalPages }}</span>
+    <button class="btn-secondary" [disabled]="page + 1 >= totalPages" (click)="goToPage(page + 1)">Next</button>
+  </div>
+</div>

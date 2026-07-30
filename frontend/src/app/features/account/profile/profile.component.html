@@ -1,0 +1,55 @@
+<div class="animate-fade-in" style="max-width: 560px;">
+  <div class="page-header">
+    <div>
+      <h2>My Profile</h2>
+      <p style="color: var(--text-secondary);">Update your account details</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="state-message">Loading profile...</div>
+  <div *ngIf="!isLoading && error" class="state-message error">{{ error }}</div>
+
+  <div class="glass-panel" *ngIf="!isLoading && !error && profile">
+    <div *ngIf="saveError" style="background-color: rgba(239, 68, 68, 0.1); color: var(--danger-color); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+      {{ saveError }}
+    </div>
+
+    <div *ngIf="emailChangePending" style="background-color: rgba(16, 185, 129, 0.1); color: var(--accent-color); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+      A verification link has been sent to your new e-mail address. Your active e-mail won't change until you confirm it.
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="save()">
+      <div style="display: flex; gap: 1rem;">
+        <div class="form-group" style="flex: 1;">
+          <label for="firstName">First name</label>
+          <input id="firstName" type="text" class="input-field" formControlName="firstName">
+        </div>
+        <div class="form-group" style="flex: 1;">
+          <label for="lastName">Last name</label>
+          <input id="lastName" type="text" class="input-field" formControlName="lastName">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" class="input-field" formControlName="email">
+      </div>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" class="input-field" [value]="profile.username" disabled>
+      </div>
+
+      <div class="form-group">
+        <label>Roles</label>
+        <div class="checkbox-list">
+          <span class="badge" *ngFor="let role of profile.roles">{{ role }}</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="profileForm.invalid || isSaving">
+        {{ isSaving ? 'Saving...' : 'Save Changes' }}
+      </button>
+    </form>
+  </div>
+</div>

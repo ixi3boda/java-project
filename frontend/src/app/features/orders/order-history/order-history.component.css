@@ -1,0 +1,26 @@
+::ng-deep .status-pending {
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--text-secondary);
+}
+
+::ng-deep .status-confirmed,
+::ng-deep .status-processing {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--primary-color);
+}
+
+::ng-deep .status-shipped {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-color);
+}
+
+::ng-deep .status-delivered {
+  background: rgba(16, 185, 129, 0.25);
+  color: var(--accent-color);
+}
+
+::ng-deep .status-cancelled,
+::ng-deep .status-refunded {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger-color);
+}

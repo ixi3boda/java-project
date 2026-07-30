@@ -1,0 +1,70 @@
+<div class="animate-fade-in">
+  <div class="page-header">
+    <div>
+      <h2>Your Cart</h2>
+      <p style="color: var(--text-secondary);">Review items before placing your order</p>
+    </div>
+  </div>
+
+  <!-- Order placed confirmation -->
+  <div *ngIf="placedOrderId" class="glass-panel" style="text-align: center;">
+    <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">Order #{{ placedOrderId }} placed!</h3>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">We'll start processing it shortly.</p>
+    <button class="btn-primary" (click)="goToOrders()">View My Orders</button>
+  </div>
+
+  <ng-container *ngIf="!placedOrderId">
+    <div *ngIf="error" class="state-message error">{{ error }}</div>
+
+    <div *ngIf="cartService.lines().length === 0" class="state-message">
+      Your cart is empty — browse the <a routerLink="/products">shop</a> to add items.
+    </div>
+
+    <table class="data-table" *ngIf="cartService.lines().length">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Line Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of cartService.lines()">
+          <td><strong>{{ line.product.name }}</strong></td>
+          <td>{{ line.product.price | currency }}</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-secondary" (click)="decrement(line.product.id, line.quantity)">−</button>
+              <span>{{ line.quantity }}</span>
+              <button
+                class="btn-secondary"
+                [disabled]="line.quantity >= line.product.stockQuantity"
+                (click)="increment(line.product.id, line.quantity, line.product.stockQuantity)"
+              >+</button>
+            </div>
+          </td>
+          <td>{{ line.product.price * line.quantity | currency }}</td>
+          <td>
+            <button class="btn-danger" (click)="remove(line.product.id)">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div
+      *ngIf="cartService.lines().length"
+      class="glass-panel"
+      style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;"
+    >
+      <div>
+        <p style="color: var(--text-secondary); margin-bottom: 0.25rem;">Subtotal</p>
+        <h3 style="font-size: 1.75rem;">{{ cartService.subtotal() | currency }}</h3>
+      </div>
+      <button class="btn-primary" [disabled]="isPlacingOrder" (click)="placeOrder()">
+        {{ isPlacingOrder ? 'Placing order...' : 'Place Order' }}
+      </button>
+    </div>
+  </ng-container>
+</div>

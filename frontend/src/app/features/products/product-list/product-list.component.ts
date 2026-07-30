@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { CategoryService } from '../../../core/services/category.service';
+import { CartService } from '../../../core/services/cart.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ProductResponse } from '../../../core/models/product.models';
 import { CategoryResponse } from '../../../core/models/category.models';
 
@@ -26,9 +28,13 @@ export class ProductListComponent implements OnInit {
   pageSize = 12;
   totalPages = 0;
 
+  addedProductId: number | null = null;
+
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
+    public cartService: CartService,
+    public authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -79,5 +85,17 @@ export class ProductListComponent implements OnInit {
     if (newPage < 0 || newPage >= this.totalPages) return;
     this.page = newPage;
     this.loadProducts();
+  }
+
+  addToCart(product: ProductResponse): void {
+    if (product.stockQuantity <= 0) return;
+
+    this.cartService.addItem(product, 1);
+    this.addedProductId = product.id;
+    setTimeout(() => {
+      if (this.addedProductId === product.id) {
+        this.addedProductId = null;
+      }
+    }, 1200);
   }
 }
